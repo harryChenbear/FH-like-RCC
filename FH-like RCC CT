@@ -1,0 +1,31 @@
+from itertools import combinations
+
+# 示例数据：患者特征集合
+patients = [
+    {'A', 'C', 'F'},
+    {'B', 'D'},
+    {'A', 'E'},
+    {'C', 'D', 'G'},
+    {'B', 'F'}
+]
+
+features = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+
+def find_covering_combinations(patients, features):
+    covering_combinations = []
+    # 遍历所有可能的组合大小（从1到所有特征）
+    for r in range(1, len(features)+1):
+        # 遍历所有r长度的特征组合
+        for combo in combinations(features, r):
+            # 检查是否所有患者至少有一个特征在组合中
+            covers_all = all(not set(combo).isdisjoint(p) is False for p in patients)
+            if covers_all:
+                covering_combinations.append(combo)
+        # 如果找到当前大小的组合，停止查找更小的组合（假设需要最小）
+        if covering_combinations and r == 1:
+            break  # 单特征已覆盖所有情况
+    return covering_combinations
+
+# 获取所有覆盖组合
+result = find_covering_combinations(patients, features)
+print("满足条件的特征组合：", result)
